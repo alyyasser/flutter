@@ -749,7 +749,7 @@ class _DropdownButtonState<T> extends State<DropdownButton<T>> with WidgetsBindi
   @override
   void didChangeMetrics() {
     final Size currentSize = WidgetsBinding.instance.window.physicalSize;
-    if (_lastKnownSize.flipped == currentSize) {
+    if (currentSize.flipped == _lastKnownSize) {
       // an actual orientation changed (rotated) happen, then;
       // update the tracker variable, and;
       _lastKnownSize = currentSize;
