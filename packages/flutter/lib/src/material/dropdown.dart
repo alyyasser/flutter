@@ -724,11 +724,17 @@ class _DropdownButtonState<T> extends State<DropdownButton<T>> with WidgetsBindi
   int _selectedIndex;
   _DropdownRoute<T> _dropdownRoute;
 
+  // add variable to track the application's dimension change
+  Size _lastKnownSize;
+
   @override
   void initState() {
     super.initState();
     _updateSelectedIndex();
     WidgetsBinding.instance.addObserver(this);
+
+    // set initial value
+    _lastKnownSize = WidgetsBinding.instance.window.physicalSize;
   }
 
   @override
@@ -742,7 +748,14 @@ class _DropdownButtonState<T> extends State<DropdownButton<T>> with WidgetsBindi
   // Defined by WidgetsBindingObserver
   @override
   void didChangeMetrics() {
-    _removeDropdownRoute();
+    final Size currentSize = WidgetsBinding.instance.window.physicalSize;
+    if (_lastKnownSize.flipped == currentSize) {
+      // an actual orientation changed (rotated) happen, then;
+      // update the tracker variable, and;
+      _lastKnownSize = currentSize;
+      // reset the dropdown-route
+      _removeDropdownRoute();
+    }
   }
 
   void _removeDropdownRoute() {
